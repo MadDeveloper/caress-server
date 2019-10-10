@@ -1,0 +1,51 @@
+{
+  "name": "caress-server",
+  "description": "caress-server is a NodeJS server that coverts TUIO data to events and emits those events",
+  "version": "0.2.1",
+  "homepage": "https://github.com/ekryski/caress-server",
+  "author": {
+    "name": "Eric Kryski",
+    "email": "e.kryski@gmail.com"
+  },
+  "contributors": [],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ekryski/caress-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ekryski/caress-server/issues"
+  },
+  "engines": {
+    "node": ">0.6.13"
+  },
+  "dependencies": {
+    "jspack": "0.0.1"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "express": "~3.0.6",
+    "mocha": "*",
+    "nodemon": "^1.19.3",
+    "sinon-chai": "*",
+    "socket.io": "~0.9.13"
+  },
+  "scripts": {
+    "test": "mocha test",
+    "start": "nodemon examples/server.js",
+    "start:prod": "node examples/server.js"
+  },
+  "keywords": [
+    "tuio",
+    "osc",
+    "touch",
+    "multitouch",
+    "eventemitter"
+  ],
+  "main": "lib/caress-server.js"
+}
