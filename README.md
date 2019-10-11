@@ -4,6 +4,10 @@
 
 _Caress Server_ is a NodeJS + Socket.io backed Javascript implementation of the [TUIO protocol](http://www.tuio.org) bringing true cross platform TUIO support. Used in conjunction with the the [Caress Client](https://github.com/ekryski/caress-client/) you now get true cross browser multi-touch support and tactile interaction in the web browser.
 
+## Requirements
+
+You should use this library with [caress-client](https://github.com/MadDeveloper/caress-client)
+
 ### Background
 
 [TUIO](http://tuio.org/) is based on the [OSC protocol](http://opensoundcontrol.org/) and usually transferred via UDP. Caress uses NodeJS and websockets via ([Socket.IO](http://socket.io/)) to push OSC/TUIO messages to the browser. The Caress server listens for raw TUIO events, processes them, and then exposes them, as either an array or JSON, through an event emitter. Therefore consuming is as simple as listening for `'tuio'` events.

@@ -2,7 +2,7 @@
   "name": "caress-server",
   "description": "caress-server is a NodeJS server that coverts TUIO data to events and emits those events",
   "version": "0.3.0",
-  "homepage": "https://github.com/ekryski/caress-server",
+  "homepage": "https://github.com/MadDeveloper/caress-server",
   "author": {
     "name": "Julien Sergent",
     "email": "sergent.julien@icloud.com"
@@ -16,16 +16,17 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ekryski/caress-server.git"
+    "url": "https://github.com/MadDeveloper/caress-server.git"
   },
   "bugs": {
-    "url": "https://github.com/ekryski/caress-server/issues"
+    "url": "https://github.com/MadDeveloper/caress-server/issues"
   },
   "engines": {
     "node": ">0.6.13"
   },
   "dependencies": {
-    "jspack": "0.0.1"
+    "jspack": "0.0.1",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^6.5.1",
@@ -33,12 +34,11 @@
     "eslint-plugin-prettier": "^3.1.1",
     "express": "~3.0.6",
     "nodemon": "^1.19.3",
-    "prettier": "^1.18.2",
-    "socket.io": "^2.3.0"
+    "prettier": "^1.18.2"
   },
   "scripts": {
-    "start": "nodemon examples/server.js",
-    "start:prod": "node examples/server.js"
+    "start": "nodemon index.js",
+    "start:prod": "node ."
   },
   "keywords": [
     "tuio",
