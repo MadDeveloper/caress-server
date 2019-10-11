@@ -44,11 +44,11 @@
     ></script>
     <script
       type="text/javascript"
-      src="../common/js/socket.io-0.9.10.min.js"
+      src="../common/js/socket.io-2.3.0.min.js"
     ></script>
     <script type="text/javascript" src="../common/js/caress-0.1.0.js"></script>
     <script>
-      $(function() {
+      $(() => {
         window.client = new Caress.Client({
           host: "localhost",
           port: 5000
@@ -57,8 +57,8 @@
       })
 
       $(window)
-        .resize(function() {
-          var canvas = document.getElementById("canvas")
+        .resize(() => {
+          const canvas = document.getElementById("canvas")
 
           canvas.width = window.innerWidth
           canvas.height = window.innerHeight
@@ -66,19 +66,16 @@
         .resize()
     </script>
     <script>
-      window.canvasContext = null
-
-      var ongoingTouches = []
-
-      function colorForTouch(touch) {
-        var id = touch.identifier
-
-        return "#" + Math.floor(Math.random() * 16777215 * id).toString(16)
-      }
+      const ongoingTouches = []
+      const canvas = document.getElementById("canvas")
+      const context = canvas.getContext("2d")
+      const clearButton = document.getElementById("clear")
 
       function ongoingTouchIndexById(idToFind) {
-        for (var i = 0; i < ongoingTouches.length; i++) {
-          var id = ongoingTouches[i].identifier
+        const ongoinTouchesLength = ongoingTouches.length
+
+        for (let i = 0; i < ongoinTouchesLength; i++) {
+          const id = ongoingTouches[i].identifier
 
           if (id == idToFind) {
             return i
@@ -89,89 +86,81 @@
 
       function handleStart(evt) {
         evt.preventDefault()
-        var el = document.getElementById("canvas")
-        var ctx = el.getContext("2d")
-        var touches = evt.changedTouches
 
-        for (var i = 0; i < touches.length; i++) {
-          var color = colorForTouch(touches[i])
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
+
+        for (let i = 0; i < touchesLength; i++) {
+          context.fillRect(touches[i].pageX - 2, touches[i].pageY - 2, 4, 4)
           ongoingTouches.push(touches[i])
-          ctx.fillStyle = color
-          ctx.fillRect(touches[i].pageX - 2, touches[i].pageY - 2, 4, 4)
         }
       }
 
       function handleMove(evt) {
         evt.preventDefault()
-        var el = document.getElementById("canvas")
-        var ctx = el.getContext("2d")
-        var touches = evt.changedTouches
 
-        ctx.lineWidth = 4
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
 
-        for (var i = 0; i < touches.length; i++) {
-          var idx = ongoingTouchIndexById(touches[i].identifier)
+        context.lineWidth = 4
 
-          ctx.fillStyle = touches[i].color
-          ctx.beginPath()
-          ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY)
-          ctx.lineTo(touches[i].pageX, touches[i].pageY)
-          ctx.closePath()
-          ctx.stroke()
+        for (let i = 0; i < touchesLength; i++) {
+          const idx = ongoingTouchIndexById(touches[i].identifier)
+
+          if (!ongoingTouches[idx]) {
+            // touch may has end and has not been started again
+            return
+          }
+
+          context.beginPath()
+          context.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY)
+          context.lineTo(touches[i].pageX, touches[i].pageY)
+          context.closePath()
+          context.stroke()
           ongoingTouches.splice(idx, 1, touches[i]) // swap in the new touch record
         }
       }
 
       function handleEnd(evt) {
         evt.preventDefault()
-        var el = document.getElementById("canvas")
-        var ctx = (window.canvasContext = el.getContext("2d"))
-        var touches = evt.changedTouches
 
-        ctx.lineWidth = 4
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
 
-        for (var i = 0; i < touches.length; i++) {
-          var color = colorForTouch(touches[i])
-          var idx = ongoingTouchIndexById(touches[i].identifier)
+        context.lineWidth = 4
 
-          ctx.fillStyle = color
-          ctx.beginPath()
-          ctx.moveTo(ongoingTouches[i].pageX, ongoingTouches[i].pageY)
-          ctx.lineTo(touches[i].pageX, touches[i].pageY)
+        for (let i = 0; i < touchesLength; i++) {
+          const idx = ongoingTouchIndexById(touches[i].identifier)
+
+          context.beginPath()
+          context.moveTo(ongoingTouches[i].pageX, ongoingTouches[i].pageY)
+          context.lineTo(touches[i].pageX, touches[i].pageY)
           ongoingTouches.splice(i, 1) // remove it; we're done
         }
       }
 
       function handleCancel(evt) {
         evt.preventDefault()
-        var touches = evt.changedTouches
 
-        for (var i = 0; i < touches.length; i++) {
+        const touches = evt.changedTouches
+        const touchesLength = touches.length
+
+        for (let i = 0; i < touchesLength; i++) {
           ongoingTouches.splice(i, 1) // remove it; we're done
         }
       }
 
       function clear() {
-        var el = document.getElementById("canvas")
-        window.canvasContext.clearRect(0, 0, el.width, el.height)
+        context.clearRect(0, 0, canvas.width, canvas.height)
       }
 
       function startup() {
-        var el = document.getElementById("canvas")
-        el.addEventListener("touchstart", handleStart, false)
-        el.addEventListener("touchend", handleEnd, false)
-        el.addEventListener("touchcancel", handleCancel, false)
-        el.addEventListener("touchleave", handleEnd, false)
-        el.addEventListener("touchmove", handleMove, false)
-
-        var clearButton = document.getElementById("clear")
-
-        clearButton.addEventListener("touchstart", clear, false)
-        // document
-        //   .querySelector("body")
-        //   .addEventListener("touchstart", event =>
-        //     console.log(event.changedTouches)
-        //   )
+        canvas.addEventListener("touchstart", handleStart)
+        canvas.addEventListener("touchend", handleEnd)
+        canvas.addEventListener("touchcancel", handleCancel)
+        canvas.addEventListener("touchleave", handleEnd)
+        canvas.addEventListener("touchmove", handleMove)
+        clearButton.addEventListener("touchstart", clear)
       }
     </script>
   </body>

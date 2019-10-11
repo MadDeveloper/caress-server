@@ -1,19 +1,19 @@
 {
   "name": "caress-server",
   "description": "caress-server is a NodeJS server that coverts TUIO data to events and emits those events",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homepage": "https://github.com/ekryski/caress-server",
   "author": {
-    "name": "Eric Kryski",
-    "email": "e.kryski@gmail.com"
+    "name": "Julien Sergent",
+    "email": "sergent.julien@icloud.com"
   },
-  "contributors": [],
-  "licenses": [
+  "contributors": [
     {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/MIT"
+      "name": "Eric Kryski",
+      "email": "e.kryski@gmail.com"
     }
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ekryski/caress-server.git"
@@ -28,15 +28,11 @@
     "jspack": "0.0.1"
   },
   "devDependencies": {
-    "chai": "*",
     "express": "~3.0.6",
-    "mocha": "*",
     "nodemon": "^1.19.3",
-    "sinon-chai": "*",
-    "socket.io": "~0.9.13"
+    "socket.io": "^2.3.0"
   },
   "scripts": {
-    "test": "mocha test",
     "start": "nodemon examples/server.js",
     "start:prod": "node examples/server.js"
   },

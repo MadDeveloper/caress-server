@@ -68,7 +68,7 @@
     ></script>
     <script
       type="text/javascript"
-      src="../common/js/socket.io-0.9.10.min.js"
+      src="../common/js/socket.io-2.3.0.min.js"
     ></script>
     <script src="../common/js/hammer.js"></script>
     <script src="../common/js/jquery.hammer.js"></script>
@@ -86,7 +86,8 @@
         //alert(ev);
       }
 
-      var debug_el = $("#debug")
+      const debug_el = $("#debug")
+
       function log(str) {
         debug_el.prepend(str + "<br>")
       }
@@ -98,9 +99,7 @@
         })
         .bind(
           "hold tap doubletap transformstart transform transformend dragstart drag dragend release swipe",
-          function(ev) {
-            log(ev.type)
-          }
+          ev => log(ev.type)
         )
 
       new Hammer.Manager(document.querySelector("body"), {

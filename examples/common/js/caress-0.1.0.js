@@ -1,6 +1,6 @@
-/*! caress-client - v0.1.0 - 2012-11-01
+/*! caress-client - v0.2.0 - 2019
  * https://github.com/ekryski/caress-client
- * Copyright (c) 2012 Eric Kryski; Licensed MIT */
+ * Copyright (c) 2019 Julien Sergent; Licensed MIT */
 
 ;((root, factory) => {
   if (typeof define === "function" && define.amd) {
@@ -30,22 +30,19 @@
    *
    * @api public
    */
-
-  Caress.version = "0.1.0"
+  Caress.version = "0.2.0"
 
   /**
    * TUIO Protocol implemented.
    *
    * @api public
    */
-
   Caress.protocol = "1.1"
 
   /**
    * The Caress Client Object
    */
-  const Client = (Caress.Client = function Client(options) {
-    options = options || {}
+  const Client = (Caress.Client = function Client(options = {}) {
     this.host = options.host || "127.0.0.1"
     this.port = options.port || 5000
     this.connected = false
@@ -116,14 +113,12 @@
   }
 
   Client.prototype.processPacket = function(packet) {
-    this.processMessage(packet)
-
-    // if (packet.bundle) {
-    //   this.processMessage(packet)
-    // } else {
-    //   // It's a regular message and not a bundle
-    //   // TODO: Figure out what to do. Haven't seen one of these yet
-    // }
+    if (packet.bundle) {
+      this.processMessage(packet)
+    } else {
+      // It's a regular message and not a bundle
+      // TODO: Figure out what to do. Haven't seen one of these yet
+    }
   }
 
   Client.prototype.processMessage = function(packet) {
@@ -226,13 +221,14 @@
     }
 
     // Remove the non-active cursors from the cursor namespace
-    const activeCursors = (message.sessionIds || []).map(id => id.toString())
+    const activeCursors = _.map(message.sessionIds, id => id.toString())
     const notActiveCursors = _.difference(
       _.keys(this.cursors[packet.source]),
       activeCursors
     )
+    const notActiveCursorsLength = notActiveCursors.length
 
-    for (let i = 0; i < notActiveCursors.length; i++) {
+    for (let i = 0; i < notActiveCursorsLength; i++) {
       const key = notActiveCursors[i]
       const touch = this.touches[packet.source][key]
 
@@ -257,15 +253,16 @@
     }
 
     // Remove the non-active objects from the object namespace
-    const activeObjects = (message.sessionIds || []).map(id => id.toString())
+    const activeObjects = _.map(message.sessionIds, id => id.toString())
     const notActiveObjects = _.difference(
-      Object.keys(this.objects[packet.source]),
+      _.keys(this.objects[packet.source]),
       activeObjects
     )
+    const notActiveObjectsLength = notActiveObjects.length
 
-    for (let i = 0; i < notActiveObjects.length; i++) {
-      var key = notActiveObjects[i]
-      var touch = this.touches[packet.source][key]
+    for (let i = 0; i < notActiveObjectsLength; i++) {
+      const key = notActiveObjects[i]
+      const touch = this.touches[packet.source][key]
 
       if (touch !== undefined) {
         delete this.touches[packet.source][key]
@@ -288,13 +285,14 @@
     }
 
     // Remove the non-active blobs from the blob namespace
-    const activeBlobs = (message.sessionIds || []).map(id => id.toString())
+    const activeBlobs = _.map(message.sessionIds, id => id.toString())
     const notActiveBlobs = _.difference(
-      Object.keys(this.blobs[packet.source]),
+      _.keys(this.blobs[packet.source]),
       activeBlobs
     )
+    const notActiveBlobsLength = notActiveBlobs.length
 
-    for (let i = 0; i < notActiveBlobs.length; i++) {
+    for (let i = 0; i < notActiveBlobsLength; i++) {
       const key = notActiveBlobs[i]
       const touch = this.touches[packet.source][key]
 
