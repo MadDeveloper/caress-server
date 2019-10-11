@@ -5,8 +5,8 @@
 ;((root, factory) => {
   if (typeof define === "function" && define.amd) {
     // AMD. Register as an anonymous module.
-    define(["underscore"], function(underscore) {
-      return (root.Caress = factory(underscore))
+    define(["underscore"], function(_) {
+      return (root.Caress = factory(_))
     })
   } else if (typeof module === "object" && module.exports) {
     // Node. Does not work with strict CommonJS, but
@@ -481,6 +481,8 @@
       targetTouches,
       changedTouches
     })
+
+    touchEvent.classId = touch.classId
 
     // Dispatch the event
     if (touch.target) {
